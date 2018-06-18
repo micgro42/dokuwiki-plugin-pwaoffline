@@ -1,0 +1,7 @@
+base   pwaoffline
+author Michael Große
+email  mic.grosse@googlemail.com
+date   2018-06-18
+name   pwaoffline plugin
+desc   Add an offline mode to DokuWiki
+url    https://dokuwiki.org/plugin:pwaoffline

@@ -37,29 +37,56 @@ const CACHED_DESTINATIONS = [
     'font',
 ];
 
+const OFFLINE_FIRST_DESTINATIONS = [
+    'script',
+    'style',
+    'font',
+];
+
 self.addEventListener('fetch', function (e) {
     if (e.request.method !== 'GET') {
         return;
     }
 
-    e.respondWith(fromNetwork(e.request, 400).then(function (response) {
+    if (!CACHED_DESTINATIONS.includes(e.request.destination)) {
+        // only cache important modes
+        return;
+    }
+
+    if (OFFLINE_FIRST_DESTINATIONS.includes(e.request.destination)) {
+        e.respondWith(cacheFirst(e.request));
+        return;
+    }
+
+    e.respondWith(networkFirst(e.request));
+});
+
+function networkFirst(request) {
+    return fromNetwork(request, 400).then(function (response) {
         if (response.headers.has('X-DWPLUGIN-PWAOFFLINE-ACT') &&
             response.headers.get('X-DWPLUGIN-PWAOFFLINE-ACT') !== 'show') {
             // don't cache modes other than show
             return response;
         }
-        if (!CACHED_DESTINATIONS.includes(e.request.destination)) {
-            // only cache important modes
-            return response;
-        }
         return caches.open(cacheName).then(function (cache) {
-            cache.put(e.request, response.clone());
+            cache.put(request, response.clone());
             return response;
         });
     }).catch(function () {
-        return fromCache(e.request);
-    }));
-});
+        return fromCache(request);
+    })
+}
+
+function cacheFirst(request) {
+    return caches.match(request).then(function(cacheResponse) {
+        return cacheResponse || fetch(request).then(function(response) {
+                return caches.open(cacheName).then(function(cache) {
+                    cache.put(request, response.clone());
+                    return response;
+                });
+            });
+    })
+}
 
 function fromNetwork(request, timeout) {
     return new Promise(function (fulfill, reject) {

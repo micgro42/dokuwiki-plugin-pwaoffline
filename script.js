@@ -8,10 +8,10 @@ if ('serviceWorker' in navigator) {
         )
         .then(function (registration) {
             const filesToCache = [
-                DOKU_BASE + 'lib/exe/js.php',
-                DOKU_BASE + 'lib/exe/css.php',
                 DOKU_BASE + 'doku.php?id=sidebar',
                 DOKU_BASE + 'doku.php?id=start',
+                DOKU_BASE + 'doku.php',
+                DOKU_BASE,
             ];
             const data = {'DOKU_BASE': window.DOKU_BASE};
             data.filesToCache = filesToCache;

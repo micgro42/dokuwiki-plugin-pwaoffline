@@ -1,5 +1,4 @@
 if ('serviceWorker' in navigator) {
-    console.log('Registering service worker...');
     const serviceWorkerScript = DOKU_BASE + 'doku.php?do=pwaoffline_serviceworker';
     navigator.serviceWorker
         .register(serviceWorkerScript, {
@@ -15,11 +14,8 @@ if ('serviceWorker' in navigator) {
             ];
             const data = {'DOKU_BASE': window.DOKU_BASE};
             data.filesToCache = filesToCache;
-            console.log("Service Worker Registered");
             if (registration.active) {
-                console.log('posting message');
                 registration.active.postMessage(JSON.stringify(data));
-                console.log('message send.');
             }
         });
 }
@@ -52,11 +48,7 @@ jQuery(function () {
 
     const lag = now - JSINFO.plugins.pwaoffline.ts;
 
-    console.log(JSINFO.plugins.pwaoffline.ts);
-    console.log(lag);
-
     if (lag > LIVE_DELAY) {
-        console.log('serving from cache?');
         showMessage('This page may have been loaded from cache. Age in seconds: ' + lag, 'notify');
         jQuery('.dokuwiki').addClass('pwa--is-offline');
     }

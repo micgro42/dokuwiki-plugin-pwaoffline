@@ -1,17 +1,13 @@
-console.log('service worker script');
-
-
 const cacheName = 'dokuwiki PWA cache';
 
 self.addEventListener('install', function (e) {
-    console.log('[ServiceWorker] Install');
 });
 
 self.addEventListener('message', function (e) {
     const data = JSON.parse(e.data);
 
-    console.log("[ServiceWorker] Received Message:");
-    console.log(data);
+    // console.log("[ServiceWorker] Received Message:");
+    // console.log(data);
 
     self.DOKU_BASE = data.DOKU_BASE;
 
@@ -24,8 +20,6 @@ self.addEventListener('message', function (e) {
             //     console.log('we have a cache for ' + e.request.url + ' from ', lmTimeString, ts);
             // }
 
-            console.log('[ServiceWorker] Caching app shell');
-            // ToDo vergleichen von timestamps und nur fehlendes / altes aktualisieren
             return cache.addAll(data.filesToCache);
         })
     );
@@ -46,8 +40,6 @@ self.addEventListener('fetch', function (e) {
     if (e.request.method !== 'GET') {
         return;
     }
-    console.log('[ServiceWorker] Fetch: ' + e.request.url);
-    // todo: somehow check for edit pages, admin pages, -> only catch show
 
     e.respondWith(fromNetwork(e.request, 400).then(function (response) {
         if (response.headers.has('X-DWPLUGIN-PWAOFFLINE-ACT') &&
@@ -74,7 +66,6 @@ function fromNetwork(request, timeout) {
         fetch(request).then(function (response) {
 
             if (response.status >= 500) {
-                console.log('[ServiceWorker] Response: ' + response.status + ' -> rejecting.');
                 reject();
             }
             clearTimeout(timeoutId);

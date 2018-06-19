@@ -34,6 +34,7 @@ const CACHED_DESTINATIONS = [
     'style',
     'script',
     'image',
+    'font',
 ];
 
 self.addEventListener('fetch', function (e) {

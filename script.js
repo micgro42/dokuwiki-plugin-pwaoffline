@@ -7,15 +7,18 @@ if ('serviceWorker' in navigator) {
         )
         .then(function (registration) {
             const filesToCache = [
-                DOKU_BASE + 'doku.php?id=sidebar',
-                DOKU_BASE + 'doku.php?id=start',
                 DOKU_BASE + 'doku.php',
                 DOKU_BASE,
             ];
             const data = {'DOKU_BASE': window.DOKU_BASE};
             data.filesToCache = filesToCache;
+            // FIXME is only executed after update!
             if (registration.active) {
-                registration.active.postMessage(JSON.stringify(data));
+                jQuery.get(DOKU_BASE + 'lib/exe/ajax.php', {
+                    call: 'plugin_pwaoffline',
+                }).done(function (data) {
+                    registration.active.postMessage(JSON.stringify(data));
+                });
             }
         });
 }

@@ -20,7 +20,7 @@ self.addEventListener('message', function (e) {
             //     console.log('we have a cache for ' + e.request.url + ' from ', lmTimeString, ts);
             // }
 
-            return cache.addAll(data.filesToCache);
+            return Promise.all(data.map(function(pageData) {return cache.add(pageData.link)}));
         })
     );
 });

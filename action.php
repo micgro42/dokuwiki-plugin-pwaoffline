@@ -49,10 +49,24 @@ class action_plugin_pwaoffline extends DokuWiki_Action_Plugin
             return;
         }
 
+        global $conf;
+
         // todo: collect some page that should be updated
+        search($pages, $conf['datadir'], 'search_allpages', ['skipacl' => false]);
 
-        // maybe this contains a time timestamp when cache was last updated?
+        $pagesToCache = [];
+        foreach ($pages as $pageData) {
+            $pagesToCache[] = [
+                'link' => wl($pageData['id']),
+                'lastmod' => $pageData['mtime'],
+            ];
+        }
 
+        header('Content-Type:application/json');
+        echo json_encode($pagesToCache);
+
+        $event->preventDefault();
+        $event->stopPropagation();
     }
 
     /**

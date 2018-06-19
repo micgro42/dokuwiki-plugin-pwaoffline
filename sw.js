@@ -76,7 +76,15 @@ function fromCache(request) {
     console.log('[ServiceWorker] trying to serve from cache...');
     return caches.open(cacheName).then(function (cache) {
         return cache.match(request).then(function (matching) {
-            return matching || Promise.reject('no-match');
+            if (matching) {
+                return matching;
+            }
+            if (request.destination === 'document') {
+                return new Response('Page not available. Please go back.', { headers: {
+                    'Content-Type': 'text/plain'
+                }});
+            }
+            return Promise.reject('no-match');
         });
     });
 }

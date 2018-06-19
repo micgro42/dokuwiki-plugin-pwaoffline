@@ -24,13 +24,25 @@ if ('serviceWorker' in navigator) {
         });
 }
 
-function reportStorageUsage($msgArea) {
+function reportStorageUsage() {
     navigator.storage.estimate().then(estimate => {
         const perc = Math.round((estimate.usage / estimate.quota) * 100 * 100)/100;
         const severity = perc > 80 ? 'error' : perc > 20 ? 'notify' : 'info';
         const msg = 'Current storage usage on this device for this origin: ' + estimate.usage + '/' + estimate.quota;
-        $msgArea.append(jQuery('<div>').addClass(severity).text(msg + ' ( ' + perc + ' % )'));
+        showMessage(msg + ' ( ' + perc + ' % )', severity);
     });
+}
+
+function showMessage(message, severity) {
+    let $msgArea = jQuery('div.pwaOfflineMSGArea');
+    if (!$msgArea.length) {
+        $msgArea = jQuery('<div>').addClass('pwaOfflineMSGArea');
+        jQuery('#dokuwiki__header').after($msgArea);
+    }
+    $msgArea.append(jQuery('<div>')
+        .text(message)
+        .addClass(severity)
+    );
 }
 
 jQuery(function () {
@@ -43,19 +55,13 @@ jQuery(function () {
     console.log(JSINFO.plugins.pwaoffline.ts);
     console.log(lag);
 
-    const $msgArea = jQuery('<div>');
-    jQuery('#dokuwiki__header').after($msgArea);
-
     if (lag > LIVE_DELAY) {
         console.log('serving from cache?');
-        $msgArea.append(jQuery('<div>')
-            .text('This page may have been loaded from cache. Age in seconds: ' + lag)
-            .addClass('notify')
-        );
+        showMessage('This page may have been loaded from cache. Age in seconds: ' + lag, 'notify');
         jQuery('.dokuwiki').addClass('pwa--is-offline');
     }
 
-    reportStorageUsage($msgArea);
+    reportStorageUsage();
 
 // if (!navigator.onLine) {
 //     jQuery('<div></div>').text('You appear to be offline')

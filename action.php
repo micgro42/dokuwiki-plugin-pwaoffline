@@ -63,7 +63,16 @@ class action_plugin_pwaoffline extends DokuWiki_Action_Plugin
      */
     public function writeConfigToJSINFO(Doku_Event $event, $param)
     {
-        global $JSINFO, $ACT;
+        global $ACT;
+        if (act_clean($ACT) === 'pwaoffline_serviceworker') {
+            header('Content-Type:application/javascript');
+            $swjs = file_get_contents(__DIR__ . '/sw.js');
+            echo $swjs;
+            exit();
+        }
+
+
+        global $JSINFO;
         header('X-DWPLUGIN-PWAOFFLINE-ACT:' . act_clean($ACT));
         if (empty($JSINFO['plugins'])) {
             $JSINFO['plugins'] = [];

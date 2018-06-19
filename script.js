@@ -1,6 +1,6 @@
 if ('serviceWorker' in navigator) {
     console.log('Registering service worker...');
-    const serviceWorkerScript = DOKU_BASE + 'sw.js';
+    const serviceWorkerScript = DOKU_BASE + 'doku.php?do=pwaoffline_serviceworker';
     navigator.serviceWorker
         .register(serviceWorkerScript, {
                 scope: '.'

@@ -24,6 +24,15 @@ if ('serviceWorker' in navigator) {
         });
 }
 
+function reportStorageUsage($msgArea) {
+    navigator.storage.estimate().then(estimate => {
+        const perc = Math.round((estimate.usage / estimate.quota) * 100 * 100)/100;
+        const severity = perc > 80 ? 'error' : perc > 20 ? 'notify' : 'info';
+        const msg = 'Current storage usage on this device for this origin: ' + estimate.usage + '/' + estimate.quota;
+        $msgArea.append(jQuery('<div>').addClass(severity).text(msg + ' ( ' + perc + ' % )'));
+    });
+}
+
 jQuery(function () {
 
     const LIVE_DELAY = 10;
@@ -34,14 +43,19 @@ jQuery(function () {
     console.log(JSINFO.plugins.pwaoffline.ts);
     console.log(lag);
 
+    const $msgArea = jQuery('<div>');
+    jQuery('#dokuwiki__header').after($msgArea);
+
     if (lag > LIVE_DELAY) {
         console.log('serving from cache?');
-        jQuery('#dokuwiki__header').after(jQuery('<div>')
+        $msgArea.append(jQuery('<div>')
             .text('This page may have been loaded from cache. Age in seconds: ' + lag)
             .addClass('notify')
         );
         jQuery('.dokuwiki').addClass('pwa--is-offline');
     }
+
+    reportStorageUsage($msgArea);
 
 // if (!navigator.onLine) {
 //     jQuery('<div></div>').text('You appear to be offline')

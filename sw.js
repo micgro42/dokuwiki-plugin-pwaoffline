@@ -35,6 +35,13 @@ self.addEventListener('activate', function (e) {
     console.log('[ServiceWorker] Activate');
 });
 
+const CACHED_DESTINATIONS = [
+    'document',
+    'style',
+    'script',
+    'image',
+];
+
 self.addEventListener('fetch', function (e) {
     if (e.request.method !== 'GET') {
         return;
@@ -46,6 +53,10 @@ self.addEventListener('fetch', function (e) {
         if (response.headers.has('X-DWPLUGIN-PWAOFFLINE-ACT') &&
             response.headers.get('X-DWPLUGIN-PWAOFFLINE-ACT') !== 'show') {
             // don't cache modes other than show
+            return response;
+        }
+        if (!CACHED_DESTINATIONS.includes(e.request.destination)) {
+            // only cache important modes
             return response;
         }
         return caches.open(cacheName).then(function (cache) {
@@ -73,7 +84,10 @@ function fromNetwork(request, timeout) {
 }
 
 function fromCache(request) {
-    console.log('[ServiceWorker] trying to serve from cache...');
+    if (!CACHED_DESTINATIONS.includes(request.destination)) {
+        return Promise.reject('no-match');
+    }
+
     return caches.open(cacheName).then(function (cache) {
         return cache.match(request).then(function (matching) {
             if (matching) {

@@ -52,6 +52,11 @@ function reportStorageUsage() {
         return Math.round(size/(CONVERSION_FACTOR * CONVERSION_FACTOR) * 10) / 10 + ' MiB';
     }
 
+    if (!navigator.storage) {
+        showMessage('Storage API is not available?', 'notify');
+        return;
+    }
+
     navigator.storage.estimate().then(estimate => {
         const perc = Math.round((estimate.usage / estimate.quota) * 100 * 100) / 100;
         const severity = perc > 80 ? 'error' : perc > 20 ? 'notify' : 'info';

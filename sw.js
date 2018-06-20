@@ -35,8 +35,9 @@ function cachePages(e, data) {
             //     const ts = (new Date( lmTimeString )).getTime();
             //     console.log('we have a cache for ' + e.request.url + ' from ', lmTimeString, ts);
             // }
-
-            return Promise.all(data.map(function(pageData) {return cache.add(pageData.link)}));
+            return Promise.all(data.map(function (pageData) {
+                return cache.add(pageData.link)
+            }));
         })
     );
 }
@@ -94,9 +95,9 @@ function networkFirst(request) {
 }
 
 function cacheFirst(request) {
-    return caches.match(request).then(function(cacheResponse) {
-        return cacheResponse || fetch(request).then(function(response) {
-                return caches.open(cacheName).then(function(cache) {
+    return caches.match(request).then(function (cacheResponse) {
+        return cacheResponse || fetch(request).then(function (response) {
+                return caches.open(cacheName).then(function (cache) {
                     cache.put(request, response.clone());
                     return response;
                 });
@@ -129,9 +130,11 @@ function fromCache(request) {
                 return matching;
             }
             if (request.destination === 'document') {
-                return new Response('Page not available. Please go back.', { headers: {
-                    'Content-Type': 'text/plain'
-                }});
+                return new Response('Page not available. Please go back.', {
+                    headers: {
+                        'Content-Type': 'text/plain'
+                    }
+                });
             }
             return Promise.reject('no-match');
         });

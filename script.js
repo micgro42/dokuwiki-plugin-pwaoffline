@@ -1,4 +1,8 @@
 if ('serviceWorker' in navigator) {
+
+    jQuery(function () {
+        showMessage('Service Worker active!', 'success');
+    });
     const serviceWorkerScript = DOKU_BASE + 'doku.php?do=pwaoffline_serviceworker';
     navigator.serviceWorker
         .register(serviceWorkerScript, {

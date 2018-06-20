@@ -1,0 +1,2 @@
+node_modules/
+!node_modules/idb-keyval/dist/idb-keyval-iife.min.js

@@ -82,9 +82,10 @@ class action_plugin_pwaoffline extends DokuWiki_Action_Plugin
             header('Content-Type:application/javascript');
             $swjs = file_get_contents(__DIR__ . '/sw.js');
             echo $swjs;
+            $idbKeyVal = file_get_contents(__DIR__ . '/node_modules/idb-keyval/dist/idb-keyval-iife.min.js');
+            echo $idbKeyVal;
             exit();
         }
-
 
         global $JSINFO;
         header('X-DWPLUGIN-PWAOFFLINE-ACT:' . act_clean($ACT));

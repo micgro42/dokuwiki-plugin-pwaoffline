@@ -21,6 +21,13 @@ self.addEventListener('message', function (e) {
                 }
             ));
             break;
+        case 'getHashVersion':
+            e.source.postMessage(
+                {
+                    type: 'swHashVersion',
+                    hash: swHashVersion, // injected when serviceworker is constructed in PHP
+                }
+            )
     }
 
 });

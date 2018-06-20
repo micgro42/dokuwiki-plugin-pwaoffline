@@ -14,6 +14,9 @@ if ('serviceWorker' in navigator) {
                     registration.active.postMessage({
                         type: 'getLastUpdate',
                     });
+                    registration.active.postMessage({
+                        type: 'getHashVersion',
+                    });
                 }
             }
         )
@@ -32,6 +35,16 @@ if ('serviceWorker' in navigator) {
                         pages: data,
                     });
                 });
+                break;
+            case 'swHashVersion':
+                if (event.data.hash !== JSINFO.plugins.pwaoffline.swHashVersion) {
+                    showMessage(
+                        `You are using an outdated serviceWorker! active: ${event.data.hash} current: ${JSINFO.plugins.pwaoffline.swHashVersion}`,
+                        'notify'
+                    );
+                    return;
+                }
+                showMessage('ServiceWorker is up-to-date!', 'success');
         }
     });
 

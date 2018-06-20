@@ -87,6 +87,7 @@ class action_plugin_pwaoffline extends DokuWiki_Action_Plugin
             header('Content-Type:application/javascript');
             $swjs = file_get_contents(__DIR__ . '/sw.js');
             echo $swjs;
+            echo "const swHashVersion = '" . md5($swjs) . "';\n";
             $idbKeyVal = file_get_contents(__DIR__ . '/node_modules/idb-keyval/dist/idb-keyval-iife.min.js');
             echo $idbKeyVal;
             exit();
@@ -100,6 +101,7 @@ class action_plugin_pwaoffline extends DokuWiki_Action_Plugin
 
         $JSINFO['plugins']['pwaoffline'] = [
             'ts' => time(),
+            'swHashVersion' => md5(file_get_contents(__DIR__ . '/sw.js')),
         ];
     }
 

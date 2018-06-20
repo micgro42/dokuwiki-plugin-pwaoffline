@@ -1,16 +1,32 @@
 const cacheName = 'dokuwiki PWA cache';
 
 self.addEventListener('install', function (e) {
+    idbKeyval.del('lastSync');
 });
 
 self.addEventListener('message', function (e) {
-    const data = JSON.parse(e.data);
 
     // console.log("[ServiceWorker] Received Message:");
-    // console.log(data);
+    // console.log(e.data.type);
 
-    self.DOKU_BASE = data.DOKU_BASE;
+    switch (e.data.type) {
+        case 'updatePages':
+            cachePages(e, e.data.pages);
+            break;
+        case 'getLastUpdate':
+            idbKeyval.get('lastSync').then((value) => e.source.postMessage(
+                {
+                    type: 'lastUpdate',
+                    ts: value,
+                }
+            ));
+            break;
+    }
 
+});
+
+function cachePages(e, data) {
+    idbKeyval.set('lastSync', Math.floor(Date.now()/1000));
     e.waitUntil(
         caches.open(cacheName).then(function (cache) {
 
@@ -23,7 +39,7 @@ self.addEventListener('message', function (e) {
             return Promise.all(data.map(function(pageData) {return cache.add(pageData.link)}));
         })
     );
-});
+}
 
 self.addEventListener('activate', function (e) {
     console.log('[ServiceWorker] Activate');

@@ -6,21 +6,35 @@ if ('serviceWorker' in navigator) {
             }
         )
         .then(function (registration) {
-            const filesToCache = [
-                DOKU_BASE + 'doku.php',
-                DOKU_BASE,
-            ];
-            const data = {'DOKU_BASE': window.DOKU_BASE};
-            data.filesToCache = filesToCache;
-            // FIXME is only executed after update!
-            if (registration.active) {
+                if (registration.active) {
+                    registration.active.postMessage({
+                        type: 'getLastUpdate',
+                    });
+                }
+            }
+        )
+    ;
+
+    navigator.serviceWorker.addEventListener('message', function swMessageListener(event){
+        console.log('[Main Script] received message: ', event.data);
+        switch(event.data.type) {
+            case 'lastUpdate':
                 jQuery.get(DOKU_BASE + 'lib/exe/ajax.php', {
                     call: 'plugin_pwaoffline',
+                    ts: event.data.ts,
                 }).done(function (data) {
-                    registration.active.postMessage(JSON.stringify(data));
+                    navigator.serviceWorker.controller.postMessage({
+                        type: 'updatePages',
+                        pages: data,
+                    });
                 });
-            }
-        });
+        }
+    });
+
+} else {
+    jQuery(function () {
+        showMessage('Service Worker not supported!', 'error');
+    });
 }
 
 function reportStorageUsage() {

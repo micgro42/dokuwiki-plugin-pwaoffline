@@ -49,13 +49,18 @@ class action_plugin_pwaoffline extends DokuWiki_Action_Plugin
             return;
         }
 
-        global $conf;
+        global $conf, $INPUT;
 
-        // todo: collect some page that should be updated
+        // fixme do a full resync if the config was saved?
+        $ts = $INPUT->has('ts') ? $INPUT->int('ts') : 0;
+
         search($pages, $conf['datadir'], 'search_allpages', ['skipacl' => false]);
 
         $pagesToCache = [];
         foreach ($pages as $pageData) {
+            if ($pageData['mtime'] < $ts) {
+                continue;
+            }
             $pagesToCache[] = [
                 'link' => wl($pageData['id']),
                 'lastmod' => $pageData['mtime'],

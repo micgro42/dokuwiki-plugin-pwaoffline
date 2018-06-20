@@ -24,10 +24,22 @@ if ('serviceWorker' in navigator) {
 }
 
 function reportStorageUsage() {
+
+    /**
+     * @param {int} size the size in byte
+     * @returns {string} The size in mebibyte with appended unit
+     */
+    function getAsStringMiB(size) {
+        const CONVERSION_FACTOR = 1024;
+        return Math.round(size/(CONVERSION_FACTOR * CONVERSION_FACTOR) * 10) / 10 + ' MiB';
+    }
+
     navigator.storage.estimate().then(estimate => {
-        const perc = Math.round((estimate.usage / estimate.quota) * 100 * 100)/100;
+        const perc = Math.round((estimate.usage / estimate.quota) * 100 * 100) / 100;
         const severity = perc > 80 ? 'error' : perc > 20 ? 'notify' : 'info';
-        const msg = 'Current storage usage on this device for this origin: ' + estimate.usage + '/' + estimate.quota;
+        const usage = getAsStringMiB(estimate.usage);
+        const quota = getAsStringMiB(estimate.quota);
+        const msg = 'Current storage usage on this device for this origin: ' + usage + '/' + quota;
         showMessage(msg + ' ( ' + perc + ' % )', severity);
     });
 }

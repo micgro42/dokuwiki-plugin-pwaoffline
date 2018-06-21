@@ -32,6 +32,23 @@ self.addEventListener('message', function (e) {
 
 });
 
+/**
+ * The normal cache.add doesn't send credentials with its request, this function does.
+ *
+ * @param cache
+ * @param url
+ */
+function cacheAddWithCredentials(cache, url) {
+    fetch(url, {
+        credentials: 'include',
+    }).then(function(response) {
+        if (!response.ok) {
+            throw new TypeError('bad response status');
+        }
+        return cache.put(url, response);
+    })
+}
+
 function cachePages(e, data) {
     idbKeyval.set('lastSync', Math.floor(Date.now()/1000));
     e.waitUntil(
@@ -43,7 +60,7 @@ function cachePages(e, data) {
             //     console.log('we have a cache for ' + e.request.url + ' from ', lmTimeString, ts);
             // }
             return Promise.all(data.map(function (pageData) {
-                return cache.add(pageData.link)
+                return cacheAddWithCredentials(cache, pageData.link)
             }));
         })
     );

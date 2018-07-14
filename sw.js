@@ -131,7 +131,16 @@ function cacheFirst(request) {
 
 function fromNetwork(request, timeout) {
     return new Promise(function (fulfill, reject) {
-        const timeoutId = setTimeout(reject, timeout);
+        const timeoutId = setTimeout(() => {
+            // check if response is in cache, if so then reject and fetch from there
+            caches.open(cacheName).then(function (cache) {
+                cache.match(request).then(function (matching) {
+                    if (matching) {
+                        reject();
+                    }
+                });
+            };
+        }, timeout);
         fetch(request).then(function (response) {
 
             if (response.status >= 500) {

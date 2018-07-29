@@ -139,7 +139,7 @@ function fromNetwork(request, timeout) {
                         reject();
                     }
                 });
-            };
+            });
         }, timeout);
         fetch(request).then(function (response) {
 

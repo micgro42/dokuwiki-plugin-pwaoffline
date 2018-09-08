@@ -1,5 +1,7 @@
 # Progressive Web App Plugin for DokuWiki
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/micgro42/dokuwiki-plugin-pwaoffline.svg)](https://greenkeeper.io/)
+
 Add an offline mode to DokuWiki
 
 ## Installation Instructions

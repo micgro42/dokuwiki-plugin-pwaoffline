@@ -4,16 +4,7 @@
 
 Add an offline mode to DokuWiki
 
-## Installation Instructions
-
-❗❗❗
-
-**In addition to the usual plugin installation you have to symlink the file `sw.js` from your wiki's root directory!!!**
-
-❗❗❗
-
 ## Usual  README
-
 
 All documentation for this plugin can be found at
 https://dokuwiki.org/plugin:pwaoffline

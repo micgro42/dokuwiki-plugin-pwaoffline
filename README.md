@@ -17,6 +17,7 @@ Please refer to http://www.dokuwiki.org/plugins for additional info
 on how to install plugins in DokuWiki.
 
 ----
+## Copyright
 Copyright (C) Michael Große <mic.grosse@googlemail.com>
 
 This program is free software; you can redistribute it and/or modify
@@ -29,3 +30,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 See the LICENSING file for details
+
+----
+
+## Tested with
+[![Browserstack](https://github.com/micgro42/dokuwiki-plugin-pwaoffline/raw/master/assets/Browserstack-logo%402x.png)](https://www.browserstack.com)

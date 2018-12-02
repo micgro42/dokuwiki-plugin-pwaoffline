@@ -33,5 +33,7 @@ See the LICENSING file for details
 
 ----
 
-## Tested with
+## Tested with BrowserStack
+BrowserStack is used to live-test the plugin with different Browsers to ensure basic functionality on modern browsers and graceful degradation on IE11.
+
 [![Browserstack Logo](https://d98b8t1nnulk5.cloudfront.net/production/images/layout/logo-header.png)](https://www.browserstack.com)

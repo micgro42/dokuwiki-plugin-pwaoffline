@@ -34,4 +34,4 @@ See the LICENSING file for details
 ----
 
 ## Tested with
-[![Browserstack](https://github.com/micgro42/dokuwiki-plugin-pwaoffline/raw/master/assets/Browserstack-logo%402x.png)](https://www.browserstack.com)
+[![Browserstack Logo](https://d98b8t1nnulk5.cloudfront.net/production/images/layout/logo-header.png)](https://www.browserstack.com)

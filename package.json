@@ -6,6 +6,6 @@
   "author": "Michael Große <mic.grosse@googlemail.com>",
   "license": "GPLv2",
   "dependencies": {
-    "idb-keyval": "^3.0.5"
+    "idb-keyval": "^3.2.0"
   }
 }
